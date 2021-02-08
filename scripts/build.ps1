@@ -45,7 +45,10 @@ Remove-Item mapping.txt
 echo "Sign AppX package ..."
 signtool sign /a /fd SHA256 /f $env:CODESIGN_CERTIFICATE /p $env:CERTIFICATE_PASSWORD $target
 
-# # upload to artifacts repository
+### Let Github Action know artifact path 
+echo "::set-output name=artifact::$target"
+
+### upload to artifacts repository
 # if (Get-Command gsutil -errorAction SilentlyContinue) {
 #     gsutil cp $target gs://build.aixmed.com/decart/
 # }
