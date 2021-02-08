@@ -27,26 +27,26 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.7
+      # - name: Set up Python
+      #   uses: actions/setup-python@v2
+      #   with:
+      #     python-version: 3.7
 
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@master
-        if: runner.os == 'Windows'
-        env:
-          CLOUDSDK_PYTHON: ${{env.pythonLocation}}\python.exe
-        with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.DECART_SERVICE_ACCOUNT }}
-          export_default_credentials: true
+      # - name: Set up Cloud SDK
+      #   uses: google-github-actions/setup-gcloud@master
+      #   if: runner.os == 'Windows'
+      #   env:
+      #     CLOUDSDK_PYTHON: ${{env.pythonLocation}}\python.exe
+      #   with:
+      #     project_id: ${{ secrets.GCP_PROJECT_ID }}
+      #     service_account_key: ${{ secrets.DECART_SERVICE_ACCOUNT }}
+      #     export_default_credentials: true
 
-      - name: Use gcloud CLI
-        run: gsutil list
-        if: runner.os == 'Windows'
-        env:
-          CLOUDSDK_PYTHON: ${{env.pythonLocation}}\python.exe
+      # - name: Use gcloud CLI
+      #   run: gsutil list
+      #   if: runner.os == 'Windows'
+      #   env:
+      #     CLOUDSDK_PYTHON: ${{env.pythonLocation}}\python.exe
 
       - name: Decode base64
         id: certificate
@@ -62,3 +62,10 @@ jobs:
           CODESIGN_CERTIFICATE: ${{ steps.certificate.outputs.filePath }}
           CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
           DECART_SERVICE_ACCOUNT: ${{ secrets.DECART_SERVICE_ACCOUNT }}
+
+      - id: upload-file
+        uses: google-github-actions/upload-cloud-storage@main
+        with:
+          credentials: ${{ secrets.DECART_SERVICE_ACCOUNT }}
+          path: ${{ github.workspace }}/*.appx
+          destination: build.aixmed.com/test/
