@@ -6,4 +6,4 @@ signtool -h
 
 makeappx -h
 
-echo "done
+echo "done"
