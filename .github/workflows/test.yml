@@ -27,16 +27,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Decode base64
-        id: certificate
+      - id: certificate
         uses: timheuer/base64-to-file@v1
         with:
           fileName: 'certificate.p12'
           encodedString: ${{ secrets.CODE_SIGN_CERT }}
 
-     # Runs a set of commands using the build script
-      - name: Run a build script
-        id: build
+      - id: build
         run: scripts/build.ps1
         env:
           CODESIGN_CERTIFICATE: ${{ steps.certificate.outputs.filePath }}
