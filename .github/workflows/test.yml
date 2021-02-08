@@ -24,6 +24,8 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       # Decode base64
       - name: Decode base64
@@ -35,7 +37,7 @@ jobs:
 
       # Runs a set of commands using the build script
       - name: Run a build script
-        run: scripts/test.ps1
+        run: scripts/build.ps1
         env:
           CODESIGN_CERTIFICATE: ${{ steps.certificate.outputs.filePath }}
           CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
