@@ -36,8 +36,7 @@ jobs:
       # Runs a set of commands using the build script
       - name: Run a build script
         run: scripts/build.ps1
-        with:
-          certificate: ${{ steps.certificate.outputs.filePath }}
         env:
+          CODESIGN_CERTIFICATE: ${{ steps.certificate.outputs.filePath }}
           CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
           DECART_SERVICE_ACCOUNT: ${{ secrets.DECART_SERVICE_ACCOUNT }}
