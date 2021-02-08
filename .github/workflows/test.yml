@@ -34,13 +34,15 @@ jobs:
           fileName: 'certificate.p12'
           encodedString: ${{ secrets.CODE_SIGN_CERT }}
 
-      - uses: actions-hub/gcloud@master
-        env:
-          PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-          APPLICATION_CREDENTIALS: ${{ secrets.DECART_SERVICE_ACCOUNT }}
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@master
         with:
-          args: list
-          cli: gsutil
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.DECART_SERVICE_ACCOUNT }}
+          export_default_credentials: true
+
+      - name: Use gcloud CLI
+        run: gsutil list
 
       # Runs a set of commands using the build script
       - name: Run a build script
