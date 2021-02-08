@@ -27,15 +27,16 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Decode base64
-        id: certificate
-        uses: timheuer/base64-to-file@v1
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          fileName: 'certificate.p12'
-          encodedString: ${{ secrets.CODE_SIGN_CERT }}
+          python-version: 3.7
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@master
+        if: runner.os == 'Windows'
+        env:
+          CLOUDSDK_PYTHON: ${{env.pythonLocation}}\python.exe
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           service_account_key: ${{ secrets.DECART_SERVICE_ACCOUNT }}
@@ -43,8 +44,18 @@ jobs:
 
       - name: Use gcloud CLI
         run: gsutil list
+        if: runner.os == 'Windows'
+        env:
+          CLOUDSDK_PYTHON: ${{env.pythonLocation}}\python.exe
 
-      # Runs a set of commands using the build script
+      - name: Decode base64
+        id: certificate
+        uses: timheuer/base64-to-file@v1
+        with:
+          fileName: 'certificate.p12'
+          encodedString: ${{ secrets.CODE_SIGN_CERT }}
+
+     # Runs a set of commands using the build script
       - name: Run a build script
         run: scripts/build.ps1
         env:
