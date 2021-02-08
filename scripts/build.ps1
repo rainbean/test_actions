@@ -43,7 +43,7 @@ Remove-Item mapping.txt
 
 ### Sign package, /v for verbose
 echo "Sign AppX package ..."
-signtool sign /a /fd SHA256 /f $env:CSC_LINK /p $env:CSC_KEY_PASSWORD $target
+signtool sign /a /fd SHA256 /f $env:INPUT_CERTIFICATE /p $env:CERTIFICATE_PASSWORD $target
 
 # # upload to artifacts repository
 # if (Get-Command gsutil -errorAction SilentlyContinue) {
