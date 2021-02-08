@@ -27,27 +27,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      # - name: Set up Python
-      #   uses: actions/setup-python@v2
-      #   with:
-      #     python-version: 3.7
-
-      # - name: Set up Cloud SDK
-      #   uses: google-github-actions/setup-gcloud@master
-      #   if: runner.os == 'Windows'
-      #   env:
-      #     CLOUDSDK_PYTHON: ${{env.pythonLocation}}\python.exe
-      #   with:
-      #     project_id: ${{ secrets.GCP_PROJECT_ID }}
-      #     service_account_key: ${{ secrets.DECART_SERVICE_ACCOUNT }}
-      #     export_default_credentials: true
-
-      # - name: Use gcloud CLI
-      #   run: gsutil list
-      #   if: runner.os == 'Windows'
-      #   env:
-      #     CLOUDSDK_PYTHON: ${{env.pythonLocation}}\python.exe
-
       - name: Decode base64
         id: certificate
         uses: timheuer/base64-to-file@v1
@@ -69,4 +48,4 @@ jobs:
         with:
           credentials: ${{ secrets.DECART_SERVICE_ACCOUNT }}
           path: ${{ steps.build.outputs.artifact }}
-          destination: build.aixmed.com/test/
+          destination: build.aixmed.com/test
