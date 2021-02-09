@@ -60,6 +60,3 @@ func onReady() {
 func onExit() {
 	// clean up here
 }
-
-func main() {
-}
