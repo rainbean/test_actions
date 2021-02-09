@@ -6,8 +6,7 @@ name: Build
 on:
   # Triggers the workflow on push tags begin with 'v'
   push:
-    tags:
-      - v*
+    branches: [ main ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -33,7 +32,8 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      - id: certificate
+      - if: matrix.os == 'windows-latest'
+        id: certificate
         uses: timheuer/base64-to-file@v1
         with:
           fileName: 'certificate.p12'
@@ -53,6 +53,6 @@ jobs:
           path: ${{ steps.build.outputs.artifact }}
           destination: build.aixmed.com/test
 
-      - uses: release-drafter/release-drafter@v5
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - uses: release-drafter/release-drafter@v5
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
