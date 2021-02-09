@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: Build
 
 # Controls when the action will run. 
 on:
@@ -18,9 +18,18 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: windows-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        # ubuntu-18.04 for glibc version compatibility
+        os: [ubuntu-18.04]
+        include:
+          - os: windows-latest
+            script_name: scripts/build.ps1
+          - os: ubuntu-18.04
+            script_name: scripts/build.sh
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+          # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
@@ -34,7 +43,7 @@ jobs:
           encodedString: ${{ secrets.CODE_SIGN_CERT }}
 
       - id: build
-        run: scripts/build.ps1
+        run: ${{ matrix.script_name }}
         env:
           CODESIGN_CERTIFICATE: ${{ steps.certificate.outputs.filePath }}
           CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
