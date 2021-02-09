@@ -22,7 +22,7 @@ jobs:
     strategy:
       matrix:
         # ubuntu-18.04 for glibc version compatibility
-        os: [ubuntu-18.04]
+        os: [ubuntu-18.04, windows-latest]
         include:
           - os: windows-latest
             script_name: scripts/build.ps1

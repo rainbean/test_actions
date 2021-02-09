@@ -13,7 +13,7 @@ go build -tags cli \
 ### pack
 echo "Pack decart ..."
 target="decart-linux-$tag.tar.xz"
-tar Jcf $target decart mosaique convert
+tar Jcf $target decart convert
 
 ### Let Github Action know artifact path 
 echo "::set-output name=artifact::$target"
