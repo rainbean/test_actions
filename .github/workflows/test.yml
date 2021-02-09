@@ -4,11 +4,10 @@ name: Build
 
 # Controls when the action will run. 
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
+  # Triggers the workflow on push tags begin with 'v'
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    tags:
+      - v*
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -33,8 +32,6 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
 
       - id: certificate
         uses: timheuer/base64-to-file@v1
@@ -55,3 +52,26 @@ jobs:
           credentials: ${{ secrets.DECART_SERVICE_ACCOUNT }}
           path: ${{ steps.build.outputs.artifact }}
           destination: build.aixmed.com/test
+
+      - uses: release-drafter/release-drafter@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        tag-template: 'v$RESOLVED_VERSION'
+        categories:
+          - title: '🚀 Features'
+            labels:
+              - 'feature'
+              - 'enhancement'
+          - title: '🐛 Bug Fixes'
+            labels:
+              - 'fix'
+              - 'bugfix'
+              - 'bug'
+          - title: '🧰 Maintenance'
+            label:
+              - 'chore'
+              - 'bump'
+        template: |
+          ## What’s Changed
+
+          $CHANGES
