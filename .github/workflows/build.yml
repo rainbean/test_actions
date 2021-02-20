@@ -41,6 +41,10 @@ jobs:
           fileName: 'certificate.p12'
           encodedString: ${{ secrets.CODE_SIGN_CERT }}
 
+      - if: matrix.os == 'ubuntu-latest'
+        name: apt install
+        run: apt-get install -y libgtk-3-dev libappindicator3-dev
+
       - id: build
         run: ${{ matrix.script_name }}
         env:
