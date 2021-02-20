@@ -20,11 +20,11 @@ jobs:
     strategy:
       matrix:
         # ubuntu-18.04 for glibc version compatibility
-        os: [ubuntu-18.04, windows-latest]
+        os: [ubuntu-latest, windows-latest]
         include:
           - os: windows-latest
             script_name: scripts/build.ps1
-          - os: ubuntu-18.04
+          - os: ubuntu-latest
             script_name: scripts/build.sh
 
           # Steps represent a sequence of tasks that will be executed as part of the job

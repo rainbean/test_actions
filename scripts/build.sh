@@ -6,14 +6,20 @@ curl -L -s https://storage.googleapis.com/build.aixmed.com/convert/openslide-0.4
 ### Build project
 echo "Build decart ..."
 tag=`git describe --tags --abbrev=0`
-go build -tags cli \
+
+go build -tags cli -o decart \
+         -ldflags "-X 'decart/internal/cloud.credentials=$DECART_SERVICE_ACCOUNT' \
+                   -X 'decart/internal/config.Version=$tag'"
+
+go build -tags gui -o decartw \
          -ldflags "-X 'decart/internal/cloud.credentials=$DECART_SERVICE_ACCOUNT' \
                    -X 'decart/internal/config.Version=$tag'"
 
 ### pack
 echo "Pack decart ..."
 target="decart-linux-$tag.tar.xz"
-tar Jcf $target decart convert
+export XZ_DEFAULTS="-T 0"
+tar Jcf $target decart decartw convert assets
 
 ### Let Github Action know artifact path 
 echo "::set-output name=artifact::$target"

@@ -29,8 +29,14 @@ func init() {
 }
 
 func onReady() {
+	var p string
+	if runtime.GOOS == "windows" {
+		p = filepath.Join(assets, "Icon.ico")
+	} else {
+		p = filepath.Join(assets, "Icon.png")
+	}
 	// create system tray menu
-	icon, err := ioutil.ReadFile(filepath.Join(assets, "Icon.ico"))
+	icon, err := ioutil.ReadFile(p)
 	if err != nil {
 		log.Fatal("invalid icon")
 	}
